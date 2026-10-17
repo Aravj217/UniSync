@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">UniSync</string>
+    <string name="tagline">Events, People, Participation — In Sync.</string>
+
+    <!-- Auth -->
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="logout">Logout</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="full_name">Full Name</string>
+    <string name="course">Course / Program</string>
+    <string name="year">Academic Year</string>
+    <string name="department">Department / School</string>
+    <string name="roll_number">Roll Number</string>
+    <string name="welcome_back">Welcome back!</string>
+    <string name="create_account">Create Account</string>
+    <string name="already_have_account">Already have an account? Login</string>
+    <string name="no_account">Don\'t have an account? Register</string>
+    <string name="logging_in">Logging in…</string>
+    <string name="registering">Creating account…</string>
+
+    <!-- Dashboard -->
+    <string name="admin_dashboard">Admin Dashboard</string>
+    <string name="organizer_dashboard">Organizer Dashboard</string>
+    <string name="student_dashboard">Home</string>
+    <string name="welcome_user">Welcome, %1$s</string>
+
+    <!-- Events -->
+    <string name="create_event">Create Event</string>
+    <string name="my_events">My Events</string>
+    <string name="all_events">All Events</string>
+    <string name="event_name">Event Name</string>
+    <string name="event_category">Event Category</string>
+    <string name="short_description">Short Description</string>
+    <string name="full_description">Full Description</string>
+    <string name="event_date">Event Date</string>
+    <string name="start_time">Start Time</string>
+    <string name="end_time">End Time</string>
+    <string name="venue">Venue</string>
+    <string name="organizing_team">Organizing Club / Team</string>
+    <string name="faculty_in_charge">Faculty In Charge</string>
+    <string name="registration_info">Registration Instructions</string>
+    <string name="contact_info">Contact / Enquiry Info</string>
+    <string name="upload_poster">Upload Event Poster</string>
+    <string name="save_draft">Save Draft</string>
+    <string name="submit_for_approval">Submit for Approval</string>
+    <string name="edit_event">Edit Event</string>
+    <string name="delete_event">Delete Event</string>
+    <string name="resubmit">Resubmit</string>
+    <string name="event_details">Event Details</string>
+    <string name="upcoming_events">Upcoming Events</string>
+    <string name="published_events">Published Events</string>
+    <string name="search_events">Search events…</string>
+
+    <!-- Event Categories -->
+    <string name="cat_workshop">Workshop</string>
+    <string name="cat_competition">Competition</string>
+    <string name="cat_festival">Festival</string>
+    <string name="cat_seminar">Seminar</string>
+    <string name="cat_sports">Sports</string>
+    <string name="cat_cultural">Cultural</string>
+    <string name="cat_technical">Technical</string>
+    <string name="cat_social">Social Service</string>
+    <string name="cat_guest_lecture">Guest Lecture</string>
+    <string name="cat_other">Other</string>
+
+    <!-- Status -->
+    <string name="status_draft">DRAFT</string>
+    <string name="status_pending">PENDING</string>
+    <string name="status_approved">APPROVED</string>
+    <string name="status_rejected">REJECTED</string>
+    <string name="status_published">PUBLISHED</string>
+    <string name="status_cancelled">CANCELLED</string>
+    <string name="status_needs_correction">NEEDS CORRECTION</string>
+    <string name="status_completed">COMPLETED</string>
+
+    <!-- Approval -->
+    <string name="pending_approvals">Pending Approvals</string>
+    <string name="approve">Approve</string>
+    <string name="reject">Reject</string>
+    <string name="publish">Publish</string>
+    <string name="unpublish">Unpublish</string>
+    <string name="rejection_reason">Rejection Reason</string>
+    <string name="provide_reason">Please provide a reason…</string>
+    <string name="return_for_correction">Return for Correction</string>
+
+    <!-- Team Support Requests -->
+    <string name="request_team_support">Request Team Support</string>
+    <string name="my_support_requests">My Support Requests</string>
+    <string name="all_support_requests">All Support Requests</string>
+    <string name="request_title">Request Title</string>
+    <string name="request_description">Request Description</string>
+    <string name="request_reason">Reason for Request</string>
+    <string name="request_category">Request Category</string>
+    <string name="related_event">Related Event (Optional)</string>
+    <string name="work_location">Work Location</string>
+    <string name="required_date">Required Date</string>
+    <string name="people_required">Number of People Required</string>
+    <string name="request_mode">Request Mode</string>
+    <string name="mode_role_based">Request Volunteers by Role</string>
+    <string name="mode_preselected">Add Already-Selected People</string>
+    <string name="mode_mixed">Both (Mixed)</string>
+    <string name="additional_instructions">Additional Instructions</string>
+    <string name="add_person">Add Person</string>
+    <string name="remove_person">Remove Person</string>
+    <string name="person_details">Person %1$d Details</string>
+    <string name="assigned_duty">Assigned Duty</string>
+    <string name="team_group">Team / Group</string>
+    <string name="notes">Notes</string>
+
+    <!-- Support Request Categories -->
+    <string name="req_event_prep">Event Preparation</string>
+    <string name="req_decoration">Decoration</string>
+    <string name="req_stage_setup">Stage Setup</string>
+    <string name="req_tech_support">Technical Support</string>
+    <string name="req_registration">Registration Desk</string>
+    <string name="req_crowd">Crowd Coordination</string>
+    <string name="req_logistics">Logistics</string>
+    <string name="req_photography">Photography &amp; Media</string>
+    <string name="req_hospitality">Hospitality</string>
+    <string name="req_equipment">Equipment Setup</string>
+    <string name="req_cleaning">Cleaning &amp; Arrangement</string>
+    <string name="req_other">Other College Work</string>
+
+    <!-- Volunteers -->
+    <string name="manage_volunteers">Manage Volunteers</string>
+    <string name="add_volunteer">Add Volunteer</string>
+    <string name="edit_volunteer">Edit Volunteer</string>
+    <string name="remove_volunteer">Remove Volunteer</string>
+    <string name="volunteer_list">Volunteer List</string>
+    <string name="search_volunteers">Search volunteers…</string>
+    <string name="student_name">Student Name</string>
+
+    <!-- Misc -->
+    <string name="profile">Profile</string>
+    <string name="loading">Loading…</string>
+    <string name="error_occurred">An error occurred. Please try again.</string>
+    <string name="no_events">No events found</string>
+    <string name="no_requests">No support requests found</string>
+    <string name="no_volunteers">No volunteers found</string>
+    <string name="confirm_delete">Are you sure you want to delete this?</string>
+    <string name="confirm_submit">Are you sure you want to submit for approval?</string>
+    <string name="success">Success!</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="retry">Retry</string>
+    <string name="save">Save</string>
+    <string name="submit">Submit</string>
+    <string name="review">Review</string>
+    <string name="my_assignments">My Assignments</string>
+    <string name="total_events">Total Events</string>
+    <string name="total_volunteers">Total Volunteers</string>
+    <string name="manage_users">Manage Users</string>
+    <string name="no_internet">No internet connection. Please check your network.</string>
+    <string name="field_required">This field is required</string>
+    <string name="invalid_email">Please enter a valid email address</string>
+    <string name="password_too_short">Password must be at least 6 characters</string>
+    <string name="passwords_dont_match">Passwords do not match</string>
+</resources>

@@ -1,0 +1,32 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Glowing backdrop circle behind glyph -->
+    <path
+        android:fillColor="#303F9F"
+        android:pathData="M54,54m-30,0a30,30 0,1,1 60,0a30,30 0,1,1 -60,0" />
+
+    <!-- Stylized Modern 'U' Glyph in crisp white -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M37,34 L45,34 L45,56 C45,61.5 48.5,65 54,65 C59.5,65 63,61.5 63,56 L63,34 L71,34 L71,56 C71,66.2 64.2,73 54,73 C43.8,73 37,66.2 37,56 Z" />
+
+    <!-- Connecting Sync Motif / Node on top-right in Violet Accent (#B388FF) -->
+    <path
+        android:fillColor="#B388FF"
+        android:pathData="M71,36m-6,0a6,6 0,1,1 12,0a6,6 0,1,1 -12,0" />
+
+    <!-- Calendar / Event Duty Sync Node in Cyan (#00E5FF) -->
+    <path
+        android:fillColor="#00E5FF"
+        android:pathData="M37,36m-5,0a5,5 0,1,1 10,0a5,5 0,1,1 -10,0" />
+
+    <!-- People / Center Sync Dot -->
+    <path
+        android:fillColor="#7C4DFF"
+        android:pathData="M54,50m-4.5,0a4.5,4.5 0,1,1 9,0a4.5,4.5 0,1,1 -9,0" />
+
+</vector>

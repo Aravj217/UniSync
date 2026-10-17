@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ════════════════════════════════════════════════════════════
+         UniSync Color Palette
+         Navy Blue Primary · Violet Accent · Light Neutral Background
+         ════════════════════════════════════════════════════════════ -->
+
+    <!-- Primary — Navy Blue -->
+    <color name="primary">#1A237E</color>
+    <color name="primary_dark">#0D1451</color>
+    <color name="primary_light">#3949AB</color>
+    <color name="primary_surface">#E8EAF6</color>
+    <color name="primary_container">#C5CAE9</color>
+    <color name="on_primary">#FFFFFF</color>
+
+    <!-- Accent — Violet -->
+    <color name="accent">#7C4DFF</color>
+    <color name="accent_dark">#651FFF</color>
+    <color name="accent_light">#B388FF</color>
+    <color name="accent_container">#EDE7F6</color>
+    <color name="on_accent">#FFFFFF</color>
+
+    <!-- Background & Surface -->
+    <color name="background">#F5F5F7</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="surface_variant">#F0F0F5</color>
+    <color name="card_background">#FFFFFF</color>
+
+    <!-- Text -->
+    <color name="text_primary">#1A1A2E</color>
+    <color name="text_secondary">#5C5C7A</color>
+    <color name="text_hint">#9E9EB8</color>
+    <color name="text_on_dark">#FFFFFF</color>
+    <color name="text_on_light">#1A1A2E</color>
+
+    <!-- Status Colors -->
+    <color name="status_draft">#78909C</color>
+    <color name="status_pending">#FF9800</color>
+    <color name="status_approved">#4CAF50</color>
+    <color name="status_rejected">#F44336</color>
+    <color name="status_published">#2196F3</color>
+    <color name="status_cancelled">#9E9E9E</color>
+    <color name="status_needs_correction">#FF5722</color>
+    <color name="status_completed">#00BCD4</color>
+
+    <!-- Status Badge Backgrounds (light tints) -->
+    <color name="status_draft_bg">#ECEFF1</color>
+    <color name="status_pending_bg">#FFF3E0</color>
+    <color name="status_approved_bg">#E8F5E9</color>
+    <color name="status_rejected_bg">#FFEBEE</color>
+    <color name="status_published_bg">#E3F2FD</color>
+    <color name="status_cancelled_bg">#FAFAFA</color>
+    <color name="status_needs_correction_bg">#FBE9E7</color>
+    <color name="status_completed_bg">#E0F7FA</color>
+
+    <!-- Dashboard Cards -->
+    <color name="card_events">#1A237E</color>
+    <color name="card_pending">#FF9800</color>
+    <color name="card_published">#2196F3</color>
+    <color name="card_requests">#7C4DFF</color>
+    <color name="card_approved">#4CAF50</color>
+    <color name="card_volunteers">#00BCD4</color>
+    <color name="card_rejected">#F44336</color>
+
+    <!-- Gradient -->
+    <color name="gradient_start">#1A237E</color>
+    <color name="gradient_center">#3949AB</color>
+    <color name="gradient_end">#7C4DFF</color>
+
+    <!-- Splash -->
+    <color name="splash_background">#1A237E</color>
+
+    <!-- Misc -->
+    <color name="divider">#E0E0E8</color>
+    <color name="ripple">#1A7C4DFF</color>
+    <color name="overlay_dark">#80000000</color>
+    <color name="error">#D32F2F</color>
+    <color name="success">#388E3C</color>
+    <color name="warning">#F57C00</color>
+    <color name="info">#1976D2</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+</resources>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Internet permission for Firebase -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:name=".UniSyncApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.UniSync"
+        tools:targetApi="34">
+
+        <!-- Splash Screen -->
+        <activity
+            android:name=".activities.auth.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.UniSync.Splash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Authentication -->
+        <activity android:name=".activities.auth.LoginActivity"
+            android:theme="@style/Theme.UniSync.Auth" />
+        <activity android:name=".activities.auth.RegisterActivity"
+            android:theme="@style/Theme.UniSync.Auth" />
+        <activity android:name=".activities.auth.ProfileActivity" />
+
+        <!-- Admin Activities -->
+        <activity android:name=".activities.admin.AdminDashboardActivity" />
+        <activity android:name=".activities.admin.EventApprovalListActivity" />
+        <activity android:name=".activities.admin.EventReviewActivity" />
+        <activity android:name=".activities.admin.AssignmentApprovalListActivity" />
+        <activity android:name=".activities.admin.RequestApprovalListActivity" />
+        <activity android:name=".activities.admin.RequestReviewActivity" />
+        <activity android:name=".activities.admin.ManageUsersActivity" />
+        <activity android:name=".activities.admin.AllEventsActivity" />
+        <activity android:name=".activities.admin.AllVolunteersActivity" />
+
+        <!-- Organizer Activities -->
+        <activity android:name=".activities.organizer.OrganizerDashboardActivity" />
+        <activity android:name=".activities.organizer.CreateEventActivity" />
+        <activity android:name=".activities.organizer.MyEventsActivity" />
+        <activity android:name=".activities.organizer.EventDetailActivity" />
+        <activity android:name=".activities.organizer.CreateSupportRequestActivity" />
+        <activity android:name=".activities.organizer.MySupportRequestsActivity" />
+        <activity android:name=".activities.organizer.SupportRequestDetailActivity" />
+        <activity android:name=".activities.organizer.ManageVolunteersActivity" />
+        <activity android:name=".activities.organizer.AddVolunteerActivity" />
+
+        <!-- Student Activities -->
+        <activity android:name=".activities.student.StudentDashboardActivity" />
+        <activity android:name=".activities.student.EventBrowseActivity" />
+        <activity android:name=".activities.student.EventViewActivity" />
+        <activity android:name=".activities.student.PublicRequestsActivity" />
+        <activity android:name=".activities.student.MyAssignmentsActivity" />
+
+    </application>
+
+</manifest>

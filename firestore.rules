@@ -1,0 +1,191 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && (
+        getUserData().role == 'ADMIN' ||
+        request.auth.token.role == 'ADMIN'
+      );
+    }
+
+    function isOrganizer() {
+      return isAuthenticated() && (
+        getUserData().role == 'ORGANIZER' ||
+        request.auth.token.role == 'ORGANIZER'
+      );
+    }
+
+    // ─── Users Collection ───
+    match /users/{userId} {
+      // Authenticated users can read basic profiles (needed for organizer user search)
+      allow read: if isAuthenticated();
+      // Users can create their own profile during registration (with role USER/STUDENT)
+      // Admins can create or update any user
+      // Users cannot elevate their own role to ADMIN or ORGANIZER
+      allow create: if isAuthenticated() && (
+        (request.auth.uid == userId && (request.resource.data.role == 'USER' || request.resource.data.role == 'STUDENT')) ||
+        isAdmin()
+      );
+      allow update: if isAuthenticated() && (
+        (request.auth.uid == userId && request.resource.data.role == resource.data.role) ||
+        isAdmin()
+      );
+      allow delete: if isAdmin();
+    }
+
+    // ─── Organizers Collection ───
+    match /organizers/{organizerId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // ─── Clubs & Academic Departments ───
+    match /clubs/{clubId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /academicDepartments/{deptId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ─── Events Collection ───
+    match /events/{eventId} {
+      // Public can read only published events; organizers can read their own; admins can read all
+      allow read: if resource.data.status == 'PUBLISHED' ||
+                    isAdmin() ||
+                    (isOrganizer() && resource.data.organizerId == request.auth.uid);
+
+      // Organizers can create draft/pending events; Admins have full access
+      allow create: if isAdmin() || (
+        isOrganizer() &&
+        request.resource.data.organizerId == request.auth.uid &&
+        (request.resource.data.status == 'DRAFT' || request.resource.data.status == 'PENDING')
+      );
+
+      // Only Admins can set status to APPROVED, PUBLISHED, or REJECTED
+      // Organizers can update their own events only if authorized (draft/resubmit, publish approved, or cancel)
+      allow update: if isAdmin() || (
+        isOrganizer() &&
+        resource.data.organizerId == request.auth.uid && (
+          ((resource.data.status == 'DRAFT' || resource.data.status == 'REJECTED') &&
+           (request.resource.data.status == 'DRAFT' || request.resource.data.status == 'PENDING')) ||
+          (resource.data.status == 'APPROVED' && request.resource.data.status == 'PUBLISHED') ||
+          (request.resource.data.status == 'CANCELLED')
+        )
+      );
+
+      allow delete: if isAdmin() || (
+        isOrganizer() &&
+        resource.data.organizerId == request.auth.uid &&
+        resource.data.status == 'DRAFT'
+      );
+    }
+
+    // ─── Volunteer Assignments Collection ───
+    match /volunteerAssignments/{assignmentId} {
+      // Users can read only their own active assignments
+      // Public event viewers can read active assignments for published events
+      // Organizers can read assignments they created
+      // Admins can read all assignments
+      allow read: if isAdmin() ||
+                    (isAuthenticated() && resource.data.userId == request.auth.uid) ||
+                    (isOrganizer() && resource.data.organizerId == request.auth.uid) ||
+                    resource.data.status == 'ACTIVE' ||
+                    resource.data.status == 'APPROVED';
+
+      // Organizers can create assignments in ACTIVE status directly
+      // Students/Teachers CANNOT assign themselves or others
+      allow create: if isAdmin() || (
+        isOrganizer() &&
+        request.resource.data.organizerId == request.auth.uid &&
+        (request.resource.data.status == 'ACTIVE' || request.resource.data.status == 'PENDING')
+      );
+
+      // Organizers can update or edit assignments they created
+      // Admins can intervene and update or cancel any assignment
+      allow update: if isAdmin() || (
+        isOrganizer() &&
+        resource.data.organizerId == request.auth.uid
+      );
+
+      allow delete: if isAdmin() || (
+        isOrganizer() &&
+        resource.data.organizerId == request.auth.uid
+      );
+    }
+
+    // Backwards compatibility with legacy volunteers collection
+    match /volunteers/{volunteerId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin() || isOrganizer();
+    }
+
+    // ─── Volunteer / Team Requests Collection ───
+    match /teamRequests/{requestId} {
+      // Public / users can see only approved public requests
+      // Organizers can see their own; Admins can see all
+      allow read: if resource.data.status == 'APPROVED' ||
+                    isAdmin() ||
+                    (isOrganizer() && resource.data.organizerId == request.auth.uid);
+
+      // Organizers create requests in PENDING status
+      allow create: if isAdmin() || (
+        isOrganizer() &&
+        request.resource.data.organizerId == request.auth.uid &&
+        request.resource.data.status == 'PENDING'
+      );
+
+      // Only Admins can change status to APPROVED or REJECTED
+      // Organizers can update only if resubmitting
+      allow update: if isAdmin() || (
+        isOrganizer() &&
+        resource.data.organizerId == request.auth.uid &&
+        resource.data.status != 'APPROVED' &&
+        request.resource.data.status == 'PENDING'
+      );
+
+      allow delete: if isAdmin() || (
+        isOrganizer() &&
+        resource.data.organizerId == request.auth.uid &&
+        resource.data.status == 'PENDING'
+      );
+
+      match /roster/{personId} {
+        allow read, write: if isAdmin() || isOrganizer();
+      }
+    }
+
+    match /team_requests/{requestId} {
+      allow read, write: if isAuthenticated();
+      match /roster/{personId} {
+        allow read, write: if isAuthenticated();
+      }
+    }
+
+    // ─── Administrative Decision Logs ───
+    match /administrativeLogs/{logId} {
+      allow read: if isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /admin_logs/{logId} {
+      allow read, write: if isAdmin();
+    }
+  }
+}

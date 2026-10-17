@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- UniSync App Icon placeholder - replace with actual icon -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Circle background -->
+    <path
+        android:fillColor="#1A237E"
+        android:pathData="M54,54m-40,0a40,40 0,1 1,80 0a40,40 0,1 1,-80 0" />
+    <!-- U letter -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M38,36L38,52C38,56.4 40.8,60 46,60C51.2,60 54,56.4 54,52L54,36L50,36L50,52C50,54.4 48.8,56.8 46,56.8C43.2,56.8 42,54.4 42,52L42,36Z" />
+    <!-- S letter -->
+    <path
+        android:fillColor="#B388FF"
+        android:pathData="M58,48C58,44.8 60.4,42 64,42C66,42 67.6,42.8 68.4,44L71.2,42C69.6,40 67.2,38.8 64,38.8C58.8,38.8 54.8,42.4 54.8,48C54.8,53.6 58.8,57.2 64,57.2C67.2,57.2 69.6,56 71.2,54L68.4,52C67.6,53.2 66,54 64,54C60.4,54 58,51.2 58,48Z" />
+</vector>
