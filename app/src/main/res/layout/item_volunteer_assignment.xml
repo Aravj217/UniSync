@@ -52,7 +52,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="2dp"
             android:background="@color/divider"
             android:layout_marginVertical="8dp" />
 
@@ -65,14 +65,14 @@
 
             <TextView
                 android:id="@+id/tvAvatar"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="41dp"
+                android:layout_height="41dp"
                 android:background="@drawable/bg_status_badge"
                 android:backgroundTint="@color/primary_container"
                 android:gravity="center"
                 android:text="V"
                 android:textColor="@color/primary"
-                android:textSize="17sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -80,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:layout_marginStart="12dp">
+                android:layout_marginStart="13dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -94,7 +94,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Volunteer Name"
-                        android:textSize="15sp"
+                        android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_primary"
                         android:maxLines="2"
