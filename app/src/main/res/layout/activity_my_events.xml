@@ -5,12 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background">
-
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_dashboard_header"
-        app:elevation="4dp">
+        app:elevation="5dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -124,8 +123,8 @@
                 android:visibility="gone">
 
                 <ImageView
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
+                    android:layout_width="73dp"
+                    android:layout_height="73dp"
                     android:src="@drawable/ic_calendar"
                     app:tint="@color/text_hint" />
 
@@ -163,7 +162,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="24dp"
+        android:layout_margin="25dp"
         android:src="@drawable/ic_add"
         app:tint="@color/white"
         app:backgroundTint="@color/primary"

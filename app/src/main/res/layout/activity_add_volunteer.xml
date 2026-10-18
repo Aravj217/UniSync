@@ -120,7 +120,7 @@
                         android:textColor="@color/text_secondary"
                         android:layout_marginBottom="12dp" />
 
-                    <!-- Email Search Input Row -->
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -151,11 +151,11 @@
                             android:layout_height="56dp"
                             android:layout_marginStart="8dp"
                             android:text="Search"
-                            app:cornerRadius="8dp"
+                            app:cornerRadius="9dp"
                             app:backgroundTint="@color/primary" />
                     </LinearLayout>
 
-                    <!-- Error State Message -->
+
                     <TextView
                         android:id="@+id/tvSearchError"
                         android:layout_width="wrap_content"
@@ -163,7 +163,7 @@
                         android:text="No registered account found with this email. Users must register first."
                         android:textSize="12sp"
                         android:textColor="@color/error"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="9dp"
                         android:visibility="gone" />
 
                     <!-- User Match Details Card -->
