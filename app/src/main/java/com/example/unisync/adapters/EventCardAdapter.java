@@ -19,7 +19,7 @@ import com.google.android.material.button.MaterialButton;
 import java.util.List;
 
 /**
- * EventCardAdapter — RecyclerView adapter for displaying Event cards.
+ * EventCardAdapter — RecyclerView adapter for displaying Event cards in a list.
  */
 public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.EventViewHolder> {
 
@@ -130,7 +130,7 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.Even
             tvOrganizingTeam.setText(event.getOrganizingTeam() != null && !event.getOrganizingTeam().isEmpty()
                     ? event.getOrganizingTeam() : "Campus");
 
-            // Load and display actual assigned volunteer count from database
+            // Load and display actual assigned volunteer count from database (async)
             tvVolunteerCount.setText("Volunteers...");
             DataManager.getInstance().getApprovedAssignmentsByEvent(event.getEventId(), list -> {
                 int count = (list != null) ? list.size() : 0;

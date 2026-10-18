@@ -18,7 +18,7 @@ import java.util.Set;
 
 /**
  * ApprovedVolunteerAdapter — displays public approved volunteers for an event.
- * Displays full name, designation, course/department, duty, and status.
+ * Displays full name, designation, course/department, duty, and status and assignment.
  */
 public class ApprovedVolunteerAdapter extends RecyclerView.Adapter<ApprovedVolunteerAdapter.ViewHolder> {
 
@@ -95,7 +95,7 @@ public class ApprovedVolunteerAdapter extends RecyclerView.Adapter<ApprovedVolun
                     ? v.getUserName().trim() : "Name unavailable";
             tvName.setText(name);
 
-            // 2. Avatar initial
+            // 2. Avatar initial to display
             String initial = "V";
             if (!"Name unavailable".equals(name) && !name.isEmpty()) {
                 initial = name.substring(0, 1).toUpperCase();
@@ -118,7 +118,7 @@ public class ApprovedVolunteerAdapter extends RecyclerView.Adapter<ApprovedVolun
             }
             tvDepartment.setText(details.length() > 0 ? details.toString() : "University Member");
 
-            // 4. Assigned Duty
+            // 4. Assigned Duty in case of event volunteer
             String duty = (v.getAssignedDuty() != null && !v.getAssignedDuty().trim().isEmpty())
                     ? v.getAssignedDuty().trim() : "Event Volunteer";
             tvDuty.setText("Duty: " + duty);
