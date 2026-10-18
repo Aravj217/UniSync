@@ -4,9 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="16dp"
-    android:layout_marginVertical="6dp"
-    app:cardCornerRadius="14dp"
+    android:layout_marginHorizontal="17dp"
+    android:layout_marginVertical="7dp"
+    app:cardCornerRadius="15dp"
     app:cardElevation="2dp"
     app:strokeWidth="1dp"
     app:strokeColor="@color/divider"
@@ -27,8 +27,8 @@
             <!-- Initial Avatar Circle -->
             <TextView
                 android:id="@+id/tvAvatar"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
+                android:layout_width="43dp"
+                android:layout_height="43dp"
                 android:background="@drawable/bg_status_badge"
                 android:backgroundTint="@color/primary_container"
                 android:gravity="center"
