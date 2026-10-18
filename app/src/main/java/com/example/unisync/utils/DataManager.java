@@ -27,13 +27,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * DataManager — unified data layer for UniSync.
+ * DataManager — unified data layer for UniSync App.
  *
  * Implements a cloud-first, resilient cache architecture:
- * 1. Attempts Firestore network synchronization.
+ * 1. Attempts Firestore network synchronization in this app.
  * 2. If Firestore permissions are locked or offline, seamlessly persists
  *    and retrieves data from local persistent cache.
- * 3. Prevents raw PERMISSION_DENIED toasts and ensures professional UI states.
+ * 3. Prevents raw PERMISSION_DENIED toasts and ensures professional UI / UX states.
  */
 public class DataManager {
 
