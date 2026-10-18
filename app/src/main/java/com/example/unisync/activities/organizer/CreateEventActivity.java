@@ -54,7 +54,7 @@ public class CreateEventActivity extends AppCompatActivity {
         setupCategoryDropdown();
         setupPickers();
 
-        // Check for edit mode
+        // Check for the edit mode
         if (getIntent().hasExtra("eventId")) {
             existingEventId = getIntent().getStringExtra("eventId");
             loadEventForEdit(existingEventId);
@@ -102,7 +102,7 @@ public class CreateEventActivity extends AppCompatActivity {
     }
 
     private void setupPickers() {
-        // Date Picker
+        // Date to Picker
         etEventDate.setOnClickListener(v -> {
             Calendar calendar = Calendar.getInstance();
             DatePickerDialog dialog = new DatePickerDialog(
@@ -119,7 +119,7 @@ public class CreateEventActivity extends AppCompatActivity {
             dialog.show();
         });
 
-        // Start Time Picker
+        // Start Time to Picker
         etStartTime.setOnClickListener(v -> {
             Calendar calendar = Calendar.getInstance();
             new TimePickerDialog(
@@ -193,7 +193,7 @@ public class CreateEventActivity extends AppCompatActivity {
         String regInfo = UIHelper.getText(etRegistrationInfo);
         String contact = UIHelper.getText(etContactInfo);
 
-        // Validation: For submitting to approval, required fields must be filled
+        // Validation: For submitting to approval, required fields must to be filled
         if (Event.STATUS_PENDING.equals(targetStatus)) {
             if (TextUtils.isEmpty(name)) {
                 etEventName.setError("Event Name is required");
@@ -262,7 +262,7 @@ public class CreateEventActivity extends AppCompatActivity {
                 UIHelper.showToast(CreateEventActivity.this, message);
                 finish();
             }
-
+// err
             @Override
             public void onError(String error) {
                 setLoading(false);

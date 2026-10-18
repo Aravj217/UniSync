@@ -126,7 +126,7 @@ public class AddVolunteerActivity extends AppCompatActivity {
         btnSearchUser.setOnClickListener(v -> performUserSearch());
         btnSaveVolunteer.setOnClickListener(v -> submitAssignment());
 
-        // Live check for overlapping assignment times
+        // Live check for the overlapping assignment times
         TextWatcher overlapWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
