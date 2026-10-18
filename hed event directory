@@ -1,0 +1,13 @@
+[1mdiff --git a/app/src/main/res/layout/activity_organizer_dashboard.xml b/app/src/main/res/layout/activity_organizer_dashboard.xml[m
+[1mindex de0a9f6..2ebf29c 100644[m
+[1m--- a/app/src/main/res/layout/activity_organizer_dashboard.xml[m
+[1m+++ b/app/src/main/res/layout/activity_organizer_dashboard.xml[m
+[36m@@ -305,7 +305,7 @@[m
+                     <TextView[m
+                         android:layout_width="wrap_content"[m
+                         android:layout_height="wrap_content"[m
+[31m-                        android:text="Assignments"[m
+[32m+[m[32m                        android:text="Assignment"[m
+                         android:textSize="11sp"[m
+                         android:textColor="@color/text_secondary" />[m
+                 </LinearLayout>[m
