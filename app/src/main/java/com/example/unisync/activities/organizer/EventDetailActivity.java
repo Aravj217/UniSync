@@ -183,7 +183,7 @@ public class EventDetailActivity extends AppCompatActivity {
             cardRejection.setVisibility(View.GONE);
         }
 
-        // Configure actions based on status
+        // Configure actions based on status of event
         String status = currentEvent.getStatus();
         if (Event.STATUS_DRAFT.equals(status) || Event.STATUS_REJECTED.equals(status)) {
             btnSubmitApproval.setVisibility(View.VISIBLE);

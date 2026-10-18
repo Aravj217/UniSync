@@ -15,7 +15,7 @@ import com.example.unisync.utils.UIHelper;
 import java.util.List;
 
 /**
- * TeamRequestAdapter — RecyclerView adapter for displaying Team Support Requests.
+ * TeamRequestAdapter — RecyclerView adapter for displaying Team Support Requests cards.
  */
 public class TeamRequestAdapter extends RecyclerView.Adapter<TeamRequestAdapter.RequestViewHolder> {
 
