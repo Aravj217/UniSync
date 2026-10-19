@@ -40,20 +40,22 @@ public class SessionManager {
      * Save user session after successful login.
      */
     public void createSession(User user) {
+        if (user == null) return;
+
         editor.putBoolean(KEY_IS_LOGGED_IN, true);
 
-        editor.putString(KEY_UID, user.getUid());
-        editor.putString(KEY_FULL_NAME, user.getFullName());
-        editor.putString(KEY_EMAIL, user.getEmail());
-        editor.putString(KEY_ROLE, user.getRole());
-        editor.putString(KEY_USER_TYPE, user.getUserType() != null ? user.getUserType() : User.USER_TYPE_STUDENT);
+        editor.putString(KEY_UID, user.getUid() != null ? user.getUid() : "");
+        editor.putString(KEY_FULL_NAME, user.getFullName() != null ? user.getFullName() : "");
+        editor.putString(KEY_EMAIL, user.getEmail() != null ? user.getEmail() : "");
+        editor.putString(KEY_ROLE, user.getRole() != null && !user.getRole().trim().isEmpty() ? user.getRole().trim() : User.ROLE_USER);
+        editor.putString(KEY_USER_TYPE, user.getUserType() != null && !user.getUserType().trim().isEmpty() ? user.getUserType().trim() : User.USER_TYPE_STUDENT);
 
-        editor.putString(KEY_COURSE, user.getCourse());
-        editor.putString(KEY_YEAR, user.getYear());
-        editor.putString(KEY_DEPARTMENT, user.getDepartment());
-        editor.putString(KEY_ROLL_NUMBER, user.getRollNumber());
+        editor.putString(KEY_COURSE, user.getCourse() != null ? user.getCourse() : "");
+        editor.putString(KEY_YEAR, user.getYear() != null ? user.getYear() : "");
+        editor.putString(KEY_DEPARTMENT, user.getDepartment() != null ? user.getDepartment() : "");
+        editor.putString(KEY_ROLL_NUMBER, user.getRollNumber() != null ? user.getRollNumber() : "");
 
-        editor.apply();
+        editor.commit(); // Ensure synchronous write to disk
     }
 
     /**
@@ -112,7 +114,8 @@ public class SessionManager {
      * Get the user's role.
      */
     public String getRole() {
-        return prefs.getString(KEY_ROLE, "");
+        String role = prefs.getString(KEY_ROLE, User.ROLE_USER);
+        return (role != null && !role.trim().isEmpty()) ? role.trim() : User.ROLE_USER;
     }
 
     /**
@@ -191,6 +194,6 @@ public class SessionManager {
      */
     public void logout() {
         editor.clear();
-        editor.apply();
+        editor.commit();
     }
 }

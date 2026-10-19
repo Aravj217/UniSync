@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.unisync.R;
 import com.example.unisync.activities.student.StudentDashboardActivity;
 import com.example.unisync.models.User;
+import com.example.unisync.utils.AuthHelper;
 import com.example.unisync.utils.Constants;
 import com.example.unisync.utils.SessionManager;
 import com.example.unisync.utils.UIHelper;
@@ -218,6 +219,8 @@ public class RegisterActivity extends AppCompatActivity {
         final String finalRollNumber = rollNumber;
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
+                    if (isFinishing() || isDestroyed()) return;
+
                     if (task.isSuccessful()) {
                         FirebaseUser firebaseUser = mAuth.getCurrentUser();
                         if (firebaseUser != null) {
@@ -229,11 +232,15 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     } else {
                         setLoading(false);
-                        String errorMsg = task.getException() != null
-                                ? task.getException().getMessage()
-                                : "Registration failed.";
-                        showError(errorMsg);
-                        Log.e(TAG, "Registration failed", task.getException());
+                        Exception ex = task.getException();
+                        Log.e(TAG, "Registration failed", ex);
+                        if (ex instanceof com.google.firebase.auth.FirebaseAuthUserCollisionException) {
+                            showError("An account with this email already exists. Please log in.");
+                        } else if (ex instanceof com.google.firebase.FirebaseNetworkException) {
+                            showError("Network error. Please check your internet connection.");
+                        } else {
+                            showError(ex != null ? ex.getMessage() : "Registration failed.");
+                        }
                     }
                 });
     }
@@ -265,31 +272,30 @@ public class RegisterActivity extends AppCompatActivity {
         user.setYear(year);
         user.setDepartment(department);
         user.setRollNumber(rollNumber);
+        user.setActive(true);
 
         db.collection(User.COLLECTION_NAME)
                 .document(uid)
                 .set(userData)
                 .addOnSuccessListener(aVoid -> {
+                    if (isFinishing() || isDestroyed()) return;
                     setLoading(false);
                     sessionManager.createSession(user);
+                    com.example.unisync.utils.DataManager.getInstance().saveUserToCache(user);
 
                     // Navigate to User Dashboard
                     UIHelper.showToast(this, "Welcome to UniSync, " + fullName + "!");
-                    Intent intent = new Intent(this, StudentDashboardActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    finish();
+                    AuthHelper.navigateToDashboard(this, User.ROLE_USER);
                 })
                 .addOnFailureListener(e -> {
-                    // Fallback to DataManager local store if Firestore write fails
-                    com.example.unisync.utils.DataManager.getInstance().saveUser(user, null);
-                    sessionManager.createSession(user);
+                    if (isFinishing() || isDestroyed()) return;
+                    Log.e(TAG, "Failed to write user profile to Firestore, caching locally", e);
                     setLoading(false);
+                    sessionManager.createSession(user);
+                    com.example.unisync.utils.DataManager.getInstance().saveUserToCache(user);
+
                     UIHelper.showToast(this, "Welcome to UniSync, " + fullName + "!");
-                    Intent intent = new Intent(this, StudentDashboardActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    finish();
+                    AuthHelper.navigateToDashboard(this, User.ROLE_USER);
                 });
     }
 

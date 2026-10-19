@@ -120,4 +120,53 @@ public class UniSyncUnitTest {
         assertEquals("WITHDRAW_ASSIGNMENT", AdminLog.ACTION_WITHDRAW_ASSIGNMENT);
         assertEquals("PUBLISH_EVENT", AdminLog.ACTION_PUBLISH_EVENT);
     }
+
+    @Test
+    public void testUserNullSafetyAndDefaultRole() {
+        // Empty constructor
+        User user = new User();
+        assertNotNull(user.getUid());
+        assertEquals("", user.getUid());
+        assertNotNull(user.getFullName());
+        assertEquals("", user.getFullName());
+        assertNotNull(user.getEmail());
+        assertEquals("", user.getEmail());
+        assertNotNull(user.getRole());
+        assertEquals(User.ROLE_USER, user.getRole());
+        assertNotNull(user.getUserType());
+        assertEquals(User.USER_TYPE_STUDENT, user.getUserType());
+        assertTrue(user.isActive());
+        assertTrue(user.isUser());
+        assertTrue(user.isStudent());
+        assertFalse(user.isAdmin());
+        assertFalse(user.isOrganizer());
+
+        // Null role assignment fallback
+        user.setRole(null);
+        assertEquals(User.ROLE_USER, user.getRole());
+
+        user.setRole("   ");
+        assertEquals(User.ROLE_USER, user.getRole());
+
+        // Null userType assignment fallback
+        user.setUserType(null);
+        assertEquals(User.USER_TYPE_STUDENT, user.getUserType());
+
+        // Deactivated user check
+        user.setActive(false);
+        assertFalse(user.isActive());
+        assertFalse(user.getActive());
+
+        // Backward compatibility: legacy STUDENT role
+        user.setRole(User.ROLE_STUDENT);
+        assertTrue(user.isStudent());
+        assertTrue(user.isUser());
+        assertFalse(user.isAdmin());
+
+        // Role normalization
+        user.setRole("admin");
+        assertTrue(user.isAdmin());
+        user.setRole("organizer");
+        assertTrue(user.isOrganizer());
+    }
 }

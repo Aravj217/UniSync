@@ -2,6 +2,8 @@ package com.example.unisync.models;
 
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentId;
+import com.google.firebase.firestore.Exclude;
+import com.google.firebase.firestore.IgnoreExtraProperties;
 import com.google.firebase.firestore.ServerTimestamp;
 
 /**
@@ -10,6 +12,7 @@ import com.google.firebase.firestore.ServerTimestamp;
  *
  * Status lifecycle: DRAFT → PENDING → APPROVED/REJECTED → PUBLISHED → CANCELLED
  */
+@IgnoreExtraProperties
 public class Event {
 
     // Status constants
@@ -117,21 +120,30 @@ public class Event {
 
     // ── Helpers ──
 
+    @Exclude
     public boolean isDraft() { return STATUS_DRAFT.equals(status); }
+    @Exclude
     public boolean isPending() { return STATUS_PENDING.equals(status); }
+    @Exclude
     public boolean isApproved() { return STATUS_APPROVED.equals(status); }
+    @Exclude
     public boolean isRejected() { return STATUS_REJECTED.equals(status); }
+    @Exclude
     public boolean isPublished() { return STATUS_PUBLISHED.equals(status); }
+    @Exclude
     public boolean isCancelled() { return STATUS_CANCELLED.equals(status); }
 
+    @Exclude
     public boolean canEdit() {
         return STATUS_DRAFT.equals(status) || STATUS_REJECTED.equals(status);
     }
 
+    @Exclude
     public boolean canSubmit() {
         return STATUS_DRAFT.equals(status) || STATUS_REJECTED.equals(status);
     }
 
+    @Exclude
     public boolean canPublish() {
         return STATUS_APPROVED.equals(status);
     }

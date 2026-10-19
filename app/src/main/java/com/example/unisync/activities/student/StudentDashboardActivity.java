@@ -19,6 +19,7 @@ import com.example.unisync.R;
 import com.example.unisync.activities.auth.ProfileActivity;
 import com.example.unisync.adapters.EventCardAdapter;
 import com.example.unisync.models.Event;
+import com.example.unisync.utils.AuthHelper;
 import com.example.unisync.utils.FirestoreHelper;
 import com.example.unisync.utils.SessionManager;
 import com.example.unisync.utils.UIHelper;
@@ -84,7 +85,12 @@ public class StudentDashboardActivity extends AppCompatActivity {
 
         tvWelcome.setText(String.format("Welcome, %s", sessionManager.getFullName()));
 
-        // Profile
+        // Profile & Logout
+        View ivLogout = findViewById(R.id.ivLogout);
+        if (ivLogout != null) {
+            ivLogout.setOnClickListener(v -> com.example.unisync.utils.AuthHelper.promptLogout(this));
+        }
+
         findViewById(R.id.ivProfile).setOnClickListener(v ->
                 startActivity(new Intent(this, ProfileActivity.class)));
 

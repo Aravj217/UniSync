@@ -1864,7 +1864,7 @@ public class DataManager {
     }
 
     // Users Local Cache
-    private synchronized void saveUserToCache(User user) {
+    public synchronized void saveUserToCache(User user) {
         List<User> list = getUsersFromCache();
         boolean replaced = false;
         for (int i = 0; i < list.size(); i++) {
@@ -1878,7 +1878,7 @@ public class DataManager {
         persistUsers(list);
     }
 
-    private synchronized User getUserFromCache(String uid) {
+    public synchronized User getUserFromCache(String uid) {
         for (User u : getUsersFromCache()) {
             if (u.getUid() != null && u.getUid().equals(uid)) return u;
         }
