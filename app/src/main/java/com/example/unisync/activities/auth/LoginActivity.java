@@ -11,24 +11,28 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.unisync.R;
-import com.example.unisync.activities.admin.AdminDashboardActivity;
-import com.example.unisync.activities.organizer.OrganizerDashboardActivity;
-import com.example.unisync.activities.student.StudentDashboardActivity;
 import com.example.unisync.models.User;
+import com.example.unisync.utils.AuthHelper;
+import com.example.unisync.utils.DataManager;
 import com.example.unisync.utils.SessionManager;
 import com.example.unisync.utils.UIHelper;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- * LoginActivity — handles user authentication via Firebase.
- * After successful login, loads the user profile from Firestore
- * and navigates to the appropriate role-based dashboard.
+ * LoginActivity — handles user authentication via Firebase Authentication.
+ * Loads the user profile from Cloud Firestore by UID, verifies role and active status,
+ * supports seamless missing profile recovery, and securely routes to the correct dashboard.
  */
 public class LoginActivity extends AppCompatActivity {
 
@@ -57,7 +61,21 @@ public class LoginActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         sessionManager = new SessionManager(this);
 
-        // Find views
+        initViews();
+        setupListeners();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Check if an authenticated user session is already active
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null && sessionManager.isLoggedIn()) {
+            AuthHelper.navigateToDashboard(this, sessionManager.getRole());
+        }
+    }
+
+    private void initViews() {
         tilEmail = findViewById(R.id.tilEmail);
         tilPassword = findViewById(R.id.tilPassword);
         etEmail = findViewById(R.id.etEmail);
@@ -81,11 +99,14 @@ public class LoginActivity extends AppCompatActivity {
         if (btnDemoStudent != null) {
             btnDemoStudent.setOnClickListener(v -> fillCredentials("student@unisync.com", "student123"));
         }
+    }
 
-        // Set click listeners
+    private void setupListeners() {
         btnLogin.setOnClickListener(v -> attemptLogin());
         tvRegister.setOnClickListener(v -> {
-            startActivity(new Intent(this, RegisterActivity.class));
+            if (!isLoggingIn) {
+                startActivity(new Intent(this, RegisterActivity.class));
+            }
         });
     }
 
@@ -138,7 +159,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUser firebaseUser = mAuth.getCurrentUser();
                         if (firebaseUser != null) {
-                            loadUserProfile(firebaseUser.getUid());
+                            loadUserProfile(firebaseUser);
                         } else {
                             setLoading(false);
                             showError("Authentication failed. Please try again.");
@@ -150,11 +171,9 @@ public class LoginActivity extends AppCompatActivity {
                         }
 
                         setLoading(false);
-                        String errorMsg = task.getException() != null
-                                ? task.getException().getMessage()
-                                : "Login failed. Please check your credentials.";
-                        showError(errorMsg);
-                        Log.e(TAG, "Login failed", task.getException());
+                        Exception exception = task.getException();
+                        Log.e(TAG, "Login failed", exception);
+                        showError(getAuthErrorMessage(exception));
                     }
                 });
     }
@@ -192,12 +211,13 @@ public class LoginActivity extends AppCompatActivity {
     private void loginWithDemoAccount(String uid, String name, String email, String role) {
         User demoUser = new User(uid, name, email, role);
         demoUser.setCourse("B.Tech Computer Science");
-        demoUser.setYear("3");
+        demoUser.setYear("3rd Year");
         demoUser.setDepartment("MPSTME, NMIMS");
         demoUser.setRollNumber("70012022045");
         demoUser.setActive(true);
 
         sessionManager.createSession(demoUser);
+        DataManager.getInstance().saveUserToCache(demoUser);
         UIHelper.showToast(this, "Logged in as " + name + " (" + role + ")");
         navigateToDashboard(role);
     }
@@ -205,55 +225,117 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Load the user's profile from Firestore after successful authentication.
      */
-    private void loadUserProfile(String uid) {
+    private void loadUserProfile(FirebaseUser firebaseUser) {
+        final String uid = firebaseUser.getUid();
+
         db.collection(User.COLLECTION_NAME)
                 .document(uid)
                 .get()
                 .addOnSuccessListener(document -> {
-                    setLoading(false);
+                    if (isFinishing() || isDestroyed()) return;
 
-                    if (document.exists()) {
-                        User user = document.toObject(User.class);
-                        if (user != null) {
-                            user.setUid(uid);
+                    try {
+                        if (document != null && document.exists()) {
+                            User user = User.fromDocumentSnapshot(document);
+
+                            if (user == null) {
+                                user = new User(uid, "UniSync User", firebaseUser.getEmail(), User.ROLE_USER);
+                            }
 
                             // Check if user account is active
                             if (!user.isActive()) {
                                 mAuth.signOut();
-                                showError("Your account has been deactivated. Contact admin.");
+                                sessionManager.logout();
+                                setLoading(false);
+                                showError("Your account has been deactivated. Please contact campus admin.");
                                 return;
                             }
 
-                            // Save session
+                            // Save session & cache
                             sessionManager.createSession(user);
+                            DataManager.getInstance().saveUserToCache(user);
 
+                            setLoading(false);
                             // Navigate to role-based dashboard
                             navigateToDashboard(user.getRole());
                         } else {
-                            showError("Failed to load profile. Please try again.");
+                            // Profile document does not exist in Firestore (Incomplete registration recovery)
+                            Log.w(TAG, "Profile not found in Firestore for UID: " + uid + ". Initiating recovery.");
+                            recoverMissingProfile(firebaseUser);
                         }
-                    } else {
-                        // Profile document doesn't exist
-                        showError("User profile not found. Contact admin.");
-                        mAuth.signOut();
+                    } catch (Exception ex) {
+                        Log.e(TAG, "Error parsing profile document", ex);
+                        setLoading(false);
+                        // Fallback: recover or use cached
+                        User fallbackUser = new User(uid, "UniSync User", firebaseUser.getEmail(), User.ROLE_USER);
+                        sessionManager.createSession(fallbackUser);
+                        navigateToDashboard(User.ROLE_USER);
                     }
                 })
                 .addOnFailureListener(e -> {
+                    if (isFinishing() || isDestroyed()) return;
                     setLoading(false);
-                    User cached = null;
-                    for (User u : com.example.unisync.utils.DataManager.getInstance().getUsersFromCache()) {
-                        if (uid.equals(u.getUid()) || (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().getEmail() != null && mAuth.getCurrentUser().getEmail().equalsIgnoreCase(u.getEmail()))) {
-                            cached = u;
-                            break;
+                    Log.e(TAG, "Error loading profile from Firestore", e);
+
+                    // Check if cached in DataManager
+                    User cached = DataManager.getInstance().getUserFromCache(uid);
+                    if (cached == null) {
+                        for (User u : DataManager.getInstance().getUsersFromCache()) {
+                            if (uid.equals(u.getUid()) || (firebaseUser.getEmail() != null && firebaseUser.getEmail().equalsIgnoreCase(u.getEmail()))) {
+                                cached = u;
+                                break;
+                            }
                         }
                     }
+
                     if (cached != null) {
                         sessionManager.createSession(cached);
                         navigateToDashboard(cached.getRole());
                     } else {
-                        showError("Failed to load profile. Please check your credentials.");
-                        Log.e(TAG, "Error loading profile", e);
+                        // Explain network error gracefully without crashing
+                        showError("Network error: Could not load your profile. Please check your connection and try again.");
                     }
+                });
+    }
+
+    /**
+     * Recovers missing Firestore profile for authenticated users without giving privileged roles.
+     */
+    private void recoverMissingProfile(FirebaseUser firebaseUser) {
+        String email = firebaseUser.getEmail() != null ? firebaseUser.getEmail() : "";
+        String fallbackName = email.contains("@") ? email.substring(0, email.indexOf("@")) : "UniSync User";
+
+        Map<String, Object> userData = new HashMap<>();
+        userData.put("uid", firebaseUser.getUid());
+        userData.put("fullName", fallbackName);
+        userData.put("email", email);
+        userData.put("role", User.ROLE_USER);
+        userData.put("userType", User.USER_TYPE_STUDENT);
+        userData.put("course", "General");
+        userData.put("year", "1st Year");
+        userData.put("department", "Other");
+        userData.put("rollNumber", "TBA");
+        userData.put("active", true);
+        userData.put("createdAt", com.google.firebase.Timestamp.now());
+
+        User user = new User(firebaseUser.getUid(), fallbackName, email, User.ROLE_USER);
+        user.setActive(true);
+
+        db.collection(User.COLLECTION_NAME).document(firebaseUser.getUid())
+                .set(userData)
+                .addOnSuccessListener(aVoid -> {
+                    setLoading(false);
+                    sessionManager.createSession(user);
+                    DataManager.getInstance().saveUserToCache(user);
+                    UIHelper.showToast(this, "Profile recovered successfully!");
+                    navigateToDashboard(User.ROLE_USER);
+                })
+                .addOnFailureListener(e -> {
+                    setLoading(false);
+                    // Persist locally so user can still access the application
+                    sessionManager.createSession(user);
+                    DataManager.getInstance().saveUserToCache(user);
+                    navigateToDashboard(User.ROLE_USER);
                 });
     }
 
@@ -261,24 +343,21 @@ public class LoginActivity extends AppCompatActivity {
      * Navigate to the correct dashboard based on user role.
      */
     private void navigateToDashboard(String role) {
-        Intent intent;
-        switch (role) {
-            case User.ROLE_ADMIN:
-                intent = new Intent(this, AdminDashboardActivity.class);
-                break;
-            case User.ROLE_ORGANIZER:
-                intent = new Intent(this, OrganizerDashboardActivity.class);
-                break;
-            default:
-                intent = new Intent(this, StudentDashboardActivity.class);
-                break;
-        }
+        AuthHelper.navigateToDashboard(this, role);
+    }
 
-        // Clear the back stack
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    /**
+     * Translate Firebase Auth exceptions into clear, friendly error messages.
+     */
+    private String getAuthErrorMessage(Exception e) {
+        if (e instanceof FirebaseAuthInvalidUserException) {
+            return "No account found with this email address.";
+        } else if (e instanceof FirebaseAuthInvalidCredentialsException) {
+            return "Incorrect password. Please verify and try again.";
+        } else if (e instanceof FirebaseNetworkException) {
+            return "Network error. Please check your internet connection.";
+        }
+        return e != null ? e.getMessage() : "Login failed. Please check your credentials.";
     }
 
     /**

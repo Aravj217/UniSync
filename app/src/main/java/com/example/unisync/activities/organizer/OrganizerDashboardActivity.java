@@ -2,6 +2,7 @@ package com.example.unisync.activities.organizer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import com.example.unisync.activities.auth.ProfileActivity;
 import com.example.unisync.models.Event;
 import com.example.unisync.models.TeamRequest;
 import com.example.unisync.models.VolunteerAssignment;
+import com.example.unisync.utils.AuthHelper;
 import com.example.unisync.utils.DataManager;
 import com.example.unisync.utils.SessionManager;
 
@@ -57,7 +59,12 @@ public class OrganizerDashboardActivity extends AppCompatActivity {
         tvPublishedEventsCount = findViewById(R.id.tvPublishedEventsCount);
         tvActiveRequestsCount = findViewById(R.id.tvActiveRequestsCount);
 
-        // 5. Profile
+        // 5. Profile & Logout
+        View ivLogout = findViewById(R.id.ivLogout);
+        if (ivLogout != null) {
+            ivLogout.setOnClickListener(v -> com.example.unisync.utils.AuthHelper.promptLogout(this));
+        }
+
         findViewById(R.id.ivProfile).setOnClickListener(v ->
                 startActivity(new Intent(this, ProfileActivity.class)));
 

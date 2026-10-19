@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.unisync.R;
 import com.example.unisync.models.User;
+import com.example.unisync.utils.AuthHelper;
 import com.example.unisync.utils.SessionManager;
 import com.example.unisync.utils.UIHelper;
 import com.google.android.material.button.MaterialButton;
@@ -47,10 +48,7 @@ public class ProfileActivity extends AppCompatActivity {
         ivBack.setOnClickListener(v -> finish());
 
         // Logout
-        btnLogout.setOnClickListener(v -> {
-            UIHelper.showConfirmDialog(this, "Logout",
-                    "Are you sure you want to logout?", this::performLogout);
-        });
+        btnLogout.setOnClickListener(v -> AuthHelper.promptLogout(this));
     }
 
     private void loadProfile() {
@@ -82,19 +80,5 @@ public class ProfileActivity extends AppCompatActivity {
             if (tvLabel != null) tvLabel.setText(label);
             if (tvValue != null) tvValue.setText(value != null && !value.isEmpty() ? value : "—");
         }
-    }
-
-    /**
-     * Sign out from Firebase and clear local session.
-     */
-    private void performLogout() {
-        FirebaseAuth.getInstance().signOut();
-        sessionManager.logout();
-
-        Intent intent = new Intent(this, LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
-        UIHelper.showToast(this, "Logged out successfully");
     }
 }

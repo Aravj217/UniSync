@@ -2,6 +2,8 @@ package com.example.unisync.models;
 
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentId;
+import com.google.firebase.firestore.Exclude;
+import com.google.firebase.firestore.IgnoreExtraProperties;
 import com.google.firebase.firestore.ServerTimestamp;
 
 /**
@@ -11,6 +13,7 @@ import com.google.firebase.firestore.ServerTimestamp;
  * Workflow:
  * Organizer assigns user -> PENDING -> Admin reviews -> APPROVED / REJECTED / NEEDS_CORRECTION / CANCELLED.
  */
+@IgnoreExtraProperties
 public class VolunteerAssignment {
 
     public static final String COLLECTION_NAME = "volunteerAssignments";
@@ -58,6 +61,7 @@ public class VolunteerAssignment {
         this.status = STATUS_ACTIVE;
     }
 
+    @Exclude
     public boolean isActive() {
         return STATUS_ACTIVE.equalsIgnoreCase(status) || STATUS_APPROVED.equalsIgnoreCase(status);
     }

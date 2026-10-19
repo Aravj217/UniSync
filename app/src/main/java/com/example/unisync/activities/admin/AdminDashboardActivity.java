@@ -2,12 +2,14 @@ package com.example.unisync.activities.admin;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.unisync.R;
 import com.example.unisync.activities.auth.ProfileActivity;
+import com.example.unisync.utils.AuthHelper;
 import com.example.unisync.utils.DataManager;
 import com.example.unisync.utils.SessionManager;
 
@@ -52,6 +54,12 @@ public class AdminDashboardActivity extends AppCompatActivity {
     }
 
     private void setupNavigation() {
+        // Logout
+        View ivLogout = findViewById(R.id.ivLogout);
+        if (ivLogout != null) {
+            ivLogout.setOnClickListener(v -> com.example.unisync.utils.AuthHelper.promptLogout(this));
+        }
+
         // Profile
         findViewById(R.id.ivProfile).setOnClickListener(v ->
                 startActivity(new Intent(this, ProfileActivity.class)));
