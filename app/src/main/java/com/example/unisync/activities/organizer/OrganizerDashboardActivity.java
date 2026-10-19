@@ -59,12 +59,7 @@ public class OrganizerDashboardActivity extends AppCompatActivity {
         tvPublishedEventsCount = findViewById(R.id.tvPublishedEventsCount);
         tvActiveRequestsCount = findViewById(R.id.tvActiveRequestsCount);
 
-        // 5. Profile & Logout
-        View ivLogout = findViewById(R.id.ivLogout);
-        if (ivLogout != null) {
-            ivLogout.setOnClickListener(v -> com.example.unisync.utils.AuthHelper.promptLogout(this));
-        }
-
+        // 5. Profile
         findViewById(R.id.ivProfile).setOnClickListener(v ->
                 startActivity(new Intent(this, ProfileActivity.class)));
 

@@ -85,12 +85,7 @@ public class StudentDashboardActivity extends AppCompatActivity {
 
         tvWelcome.setText(String.format("Welcome, %s", sessionManager.getFullName()));
 
-        // Profile & Logout
-        View ivLogout = findViewById(R.id.ivLogout);
-        if (ivLogout != null) {
-            ivLogout.setOnClickListener(v -> com.example.unisync.utils.AuthHelper.promptLogout(this));
-        }
-
+        // Profile
         findViewById(R.id.ivProfile).setOnClickListener(v ->
                 startActivity(new Intent(this, ProfileActivity.class)));
 
